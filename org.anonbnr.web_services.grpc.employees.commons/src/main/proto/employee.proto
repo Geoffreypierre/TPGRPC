@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package com.example.grpc;
+
+message Empty {}
+
+message Employee {
+	int64 id = 1;
+	string name = 2;
+	string role = 3;
+	string email = 4;
+}
+
+message EmployeeId {
+    int64 id = 1;
+}
+
+message EmployeeList {
+    repeated Employee employees = 1;
+}
+
+message EmployeeCount {
+    int32 count = 1;
+}
+
+service EmployeeService {
+    rpc getAllEmployees (Empty) returns (EmployeeList);
+    rpc getEmployeeCount (Empty) returns (EmployeeCount);
+    rpc getEmployeeById (EmployeeId) returns (Employee);
+    rpc addEmployee (Employee) returns (Employee);
+    rpc deleteEmployeeById (EmployeeId) returns (Empty);
+    rpc updateEmployee (Employee) returns (Employee);
+}
+
+// Message représentant une adresse
+message Adresse {
+    string pays = 1;
+    string ville = 2;
+    string rue = 3;
+    string lieuDit = 4;  // Correspond à lieuDit de votre modèle
+    int32 numero = 5;    // Correspond à numero
+    int32 positionGPS = 6; // Correspond à positionGPS
+}
+
+
+
+// Message représentant un partenaire
+message Partenaire {
+    int64 id = 1; // Identifiant du partenaire
+    string Nom_partenaire = 2; // Nom du partenaire
+    int32 reduc_pourcentage = 3; // Email du partenaire
+}
+
+message PartenaireId {
+    int64 id = 1;
+}
+
+message PartenaireList {
+    repeated Partenaire partenaire = 1;  // 'repeated' permet de définir une liste
+}
+
+message PartenaireCount {
+    int64 count = 1;
+}
+
+service PartenaireService {
+    rpc addPartenaire (Partenaire) returns (Partenaire);
+    rpc getPartenaireById (PartenaireId) returns (Partenaire);
+    rpc getAllPartenaires (Empty) returns (PartenaireList);
+    rpc getPartenaireCount (Empty) returns (PartenaireCount);
+    rpc deletePartenaireById (PartenaireId) returns (Empty);
+    rpc updatePartenaire (Partenaire) returns (Partenaire);
+}
+
+
+message Hotel {
+    int64 idHotel = 1; // Identifiant de l'hôtel
+    string nom = 2; // Nom de l'hôtel
+    Adresse adresse = 3; // Adresse de l'hôtel
+    float prix = 4; // Prix d'une nuitée
+    int32 nombreEtoiles = 5; // Nombre d'étoiles
+    Partenaire partenaire = 6; // Partenaire associé (optionnel)
+}
+
+// Requête pour obtenir un hôtel par ID
+message HotelId {
+    int64 idHotel = 1; // ID de l'hôtel demandé
+}
+
+message HotelCount {
+    int64 count = 1;
+}
+
+// Requête pour obtenir tous les hôtels
+message HotelList {
+	repeated Hotel hotel = 1;
+}
+
+// Service gRPC pour gérer les hôtels
+service HotelService {
+    rpc addHotel (Hotel) returns (Hotel);
+    rpc getHotelById (HotelId) returns (Hotel);
+    rpc getAllHotels (Empty) returns (HotelList);
+    rpc getHotelCount (Empty) returns (HotelCount);
+    rpc deleteHotelById (HotelId) returns (Empty);
+    rpc updateHotel (Hotel) returns (Hotel);
+}
+
+// Message représentant une chambre d'hôtel
+message Chambre {
+    int64 numero = 1;
+    string nomChambre = 2;
+    int32 nb_lit = 3;
+    double prix = 4;
+    Hotel hotel = 5; // ID de l'hôtel
+    string imagePath = 6;
+}
+
+// Message pour obtenir une chambre par ID
+message ChambreId {
+    int64 numero = 1;
+}
+
+// Liste de chambres
+message ChambreList {
+    repeated Chambre chambres = 1;
+}
+
+message ChambreCount {
+    int64 count = 1;
+}
+
+// Service gRPC pour gérer les chambres
+service ChambreService {
+    rpc getAllChambres(Empty) returns (ChambreList);
+    rpc getChambreCount(Empty) returns (ChambreCount);
+    rpc getChambreById(ChambreId) returns (Chambre);
+    rpc addChambre(Chambre) returns (Chambre);
+    rpc updateChambre(Chambre) returns (Chambre);
+    rpc deleteChambreById(ChambreId) returns (Empty);
+}
+
+// Message représentant un client
+message Client {
+    int64 id = 1;
+    string nom = 2;
+    string prenom = 3;
+    string info_carte_credit = 4;
+}
+
+// Message pour obtenir un client par ID
+message ClientId {
+    int64 id = 1;
+}
+
+// Liste de clients
+message ClientList {
+    repeated Client clients = 1;
+}
+
+// Message pour compter les clients
+message ClientCount {
+    int64 count = 1;
+}
+
+// Service gRPC pour gérer les clients
+service ClientService {
+    rpc getAllClients(Empty) returns (ClientList);
+    rpc getClientCount(Empty) returns (ClientCount);
+    rpc getClientById(ClientId) returns (Client);
+    rpc addClient(Client) returns (Client);
+    rpc updateClient(Client) returns (Client);
+    rpc deleteClientById(ClientId) returns (Empty);
+}
+
+// Message représentant une réservation
+message Reservation {
+    int64 id = 1;
+    string dateArrivee = 2;  // Date d'arrivée sous format String (par exemple "2024-12-09")
+    string dateDepart = 3;   // Date de départ sous format String (par exemple "2024-12-10")
+    Client client = 4;      // Le client associé à la reservation
+    Chambre chambre = 5;     // La chambre réservée
+}
+
+// Message pour obtenir une réservation par ID
+message ReservationId {
+    int64 id = 1;
+}
+
+// Liste de réservations
+message ReservationList {
+    repeated Reservation reservations = 1;
+}
+
+message ReservationCount {
+    int64 count = 1;
+}
+
+// Service gRPC pour gérer les réservations
+service ReservationService {
+	rpc getAllReservation (Empty) returns (ReservationList);
+	rpc getReservationCount (Empty) returns (ReservationCount);
+    rpc addReservation (Reservation) returns (Reservation);
+    rpc getReservationById (ReservationId) returns (Reservation);
+    rpc GetAllReservations (Empty) returns (ReservationList);
+    rpc DeleteReservationById (ReservationId) returns (Empty);
+}
